@@ -1,0 +1,15 @@
+clientInputModel:
+  type: object
+  description: ユーザ当人認証クライアント方式APIのINPUT
+  required:
+  - clientId
+  - clientSecret
+  properties:
+    clientId:
+      type: string
+      description: クライアントID
+      example: abc123xyz
+    clientSecret:
+      type: string
+      description: クライアントシークレット
+      example: 1234567890abcdef1234567890abcdef

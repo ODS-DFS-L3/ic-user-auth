@@ -1,0 +1,1 @@
+INSERT INTO cidrs (api_key, cidr, deleted_at, created_at, created_user_id, updated_at, updated_user_id) VALUES ('Sample-APIKey1','0.0.0.0/0', NULL,'2024-03-26 00:00:00', 'seed', '2024-03-26 00:00:00', 'seed');

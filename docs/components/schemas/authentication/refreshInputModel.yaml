@@ -1,0 +1,10 @@
+refreshInputModel:
+  type: object
+  description: アクセストークン情報更新APIのINPUT
+  required:
+  - refreshToken
+  properties:
+    refreshToken:
+      type: string
+      description: リフレッシュトークン
+      example: AMf-vBzFGeA7f_c1S8r2HKHkddm0qSSZPoIof2GHOS96QofUoiGepU1oG5o4CYT_YP6jzzZR4W1S4txBKNh2lz5lDzRXlR45r0Dr2VcI2nY0S6mdaT5vLBt9nMEBHweBu43CjrxZ1PV0ZMeyjx2EQlEkfnDEya9EG0B70Mtd4mFbsQNRFYZv0PsNaFrbs_kf-zCjBD5R0wIKPm3F_bQEHHy8MZZmpsD8LofFW_cTUrL5ztr_5XlDblyiOztn47nZaV5p02SPcX_-

@@ -1,0 +1,107 @@
+openapi: "3.0.3"
+info:
+  title: ユーザ認証/データ連携API
+  version: 0.0.5
+  description: |
+    ## 変更履歴管理
+
+    ### ver.0.0.1 2024/08/28 新規作成
+
+    ### ver.0.0.2 2024/09/12 修正・削除
+    - トークンイントロスペクションをリソースオーナー/クライアントクレデンシャル、両フロー対応可能に修正
+      - トークンイントロスペクション（クライアントシステム認証）のAPIを削除
+      - トークンイントロスペクション（ユーザ認証）→トークンイントロスペクションに名称を変更
+      - 説明書きとしてレスポンス情報にどういったときに返却されるかを追記
+      - 正常系レスポンスにopenSystemId（公開システム識別子）を追加
+      - 200ステータス時のサンプルにリソースオーナーおよびクライアントクレデンシャルフローそれぞれの返却時のパターンを追加
+      - active（トークン有効）の必須の記述を削除
+    - 一部冗長となる処理を行っており、今年度デジライン実証においては利用しない、システム認証のAPIを削除
+    - 本体定義されるべきではなかった項目に対しての桁数の記載を削除
+      - トークンイントロスペクション：idToken（IDトークン）、active（トークン有効）
+      - アクセストークン情報更新：refreshToken（リフレッシュトークン）、accessToken（アクセストークン）
+    - 表記ブレおよび誤記があった箇所の修正
+      - クライアントシステム認証：clientID（クライアントID）→clientId（クライアントID）へ項目の記載を修正
+      - #3事業所情報更新：説明書きの修正
+    - 記載がもれていた項目の追加
+      - パスワード変更：リクエストヘッダー部分へのアクセストークン
+
+    ### ver.0.0.3 2024/09/20 修正・削除
+    - ユーザ当人認証にてoperatorAccountIdに対して、formatの削除および、minLength/maxLengthの桁数を変更
+    - クライアントシステム認証にてrequiredに記載のclientId誤記により必須であることが反映されてない事象に対して必須表示となるよう修正
+    - 40X/50Xエラー時のdetail項目のサンプルの修正
+
+    ### ver.0.0.4 2024/11/15 修正
+    - #1事業者情報更新/#2事業者情報一覧取得/#3事業所情報更新/#4事業所一覧取得の修正
+      - （#3事業所情報更新/#4事業所一覧取得の修正のみ）エンドポイントの修正
+      - 各APIのリクエストヘッダーにアクセストークンを追加
+      - エラー時の返却記載を修正
+      - （#4事業所一覧取得のみ）リクエストボディの記載を削除      
+
+    ### ver.0.0.5 2024/11/29 修正
+    - servers内のURLからv1の記載を削除
+
+servers:
+  - url: https://api.server.test
+paths:
+  /auth/change:
+    $ref: "./paths/change.yaml"
+  /auth/login:
+    $ref: "./paths/login.yaml"
+  /auth/client:
+    $ref: "./paths/client.yaml"
+  /auth/refresh:
+    $ref: "./paths/refresh.yaml"
+  /api/v2/systemAuth/token:
+    $ref: "./paths/token.yaml"
+
+  /api/v2/authInfo/operator:
+    $ref: "./paths/operator.yaml"
+  /api/v2/authInfo/plant:
+    $ref: "./paths/plant.yaml"
+components:
+  schemas:
+    authentication.ChangePasswordModel:
+      $ref: "./components/schemas/authentication/changePasswordModel.yaml#/changePasswordModel"
+    authentication.LoginInputModel:
+      $ref: "./components/schemas/authentication/loginInputModel.yaml#/loginInputModel"
+    authentication.LoginOutputModel:
+      $ref: "./components/schemas/authentication/loginOutputModel.yaml#/loginOutputModel"
+    authentication.ClientInputModel:
+      $ref: "./components/schemas/authentication/clientInputModel.yaml#/clientInputModel"
+    authentication.ClientOutputModel:
+      $ref: "./components/schemas/authentication/clientOutputModel.yaml#/clientOutputModel"
+    authentication.RefreshInputModel:
+      $ref: "./components/schemas/authentication/refreshInputModel.yaml#/refreshInputModel"
+    authentication.RefreshOutputModel:
+      $ref: "./components/schemas/authentication/refreshOutputModel.yaml#/refreshOutputModel"
+    authentication.TokenInputModel:
+      $ref: "./components/schemas/authentication/tokenInputModel.yaml#/tokenInputModel"
+    authentication.TokenOutputModel:
+      $ref: "./components/schemas/authentication/tokenOutputModel.yaml#/tokenOutputModel"
+
+    dataModel.operatorModel:
+      $ref: "./components/schemas/dataModel/operatorModel.yaml#/operatorModel"
+    dataModel.plantModel:
+      $ref: "./components/schemas/dataModel/plantModel.yaml#/plantModel"
+    common.HTTP400Error:
+      $ref: "./components/schemas/common/http400Error.yaml#/HTTP400Error"
+    common.HTTP401Error:
+      $ref: "./components/schemas/common/http401Error.yaml#/HTTP401Error"
+    common.HTTP403Error:
+      $ref: "./components/schemas/common/http403Error.yaml#/HTTP403Error"
+    common.HTTP404Error:
+      $ref: "./components/schemas/common/http404Error.yaml#/HTTP404Error"
+    common.HTTP500Error:
+      $ref: "./components/schemas/common/http500Error.yaml#/HTTP500Error"
+    common.HTTP503Error:
+      $ref: "./components/schemas/common/http503Error.yaml#/HTTP503Error"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: apiKey
+      in: header
+    Authorization:
+      type: http
+      scheme: bearer
+      description: ユーザ当人認証APIで発行したアクセストークン

@@ -1,0 +1,38 @@
+version: "3.3"
+networks:
+  container-link:
+    name: docker.internal
+services:
+  db:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - container-link
+    volumes:
+      - db-vol:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: passw0rd
+      POSTGRES_USER: dhuser
+      POSTGRES_DB: dhlocal
+   # keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.2
+    container_name: keycloak
+    tty: true
+    stdin_open: true
+    #volumes:
+    #  - ./certs/keycloak.crt:/etc/x509/https/keycloak.crt
+    #  - ./certs/keycloak.key:/etc/x509/https/keycloak.key
+    ports:
+      - "4000:8080"
+      # - "9099:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    command:
+      #- start
+    - start-dev
+volumes:
+  db-vol:

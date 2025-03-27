@@ -1,0 +1,68 @@
+plantModel:
+  required:
+  - dataModelType
+  - name
+  - attribute
+  type: object
+  description: 事業所情報更新のINPUTモデル
+  properties:
+    dataModelType:
+      type: string
+      description: データモデルタイプ
+      enum:
+        - test1
+        - test2
+      example: test1
+    attribute:
+      type: object
+      description: 事業所情報
+      required:
+        - openPlantId
+        - operatorId
+        - plantAddress
+        - plantName
+        - plantAttribute
+      properties:
+        openPlantId:
+          maxLength: 26
+          minLength: 6
+          pattern: '[0-9]{6}$'
+          type: string
+          description: 事業所識別子（ローカル）
+          example: "9876543210987123456"
+        operatorId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 事業者識別子（内部）
+          format: uuid
+          example: d9a38406-cae2-4679-b052-15a75f5531e8
+        plantAddress:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 事業所所在地
+          example: xx県xx市xxxx町1-1-1234
+        plantId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 事業所識別子（内部）
+          format: uuid
+          example: d9a38406-cae2-4679-b052-15a75f5531e7
+        plantName:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 事業所名
+          example: A工場
+        plantAttribute:
+          type: object
+          description: 事業所の属性情報
+          properties:
+            globalPlantId:
+              type: string
+              description: 事業所識別子（グローバル）
+              maxLength: 256
+              minLength: 0
+              example: "sampleId1"

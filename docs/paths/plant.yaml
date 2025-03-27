@@ -1,0 +1,352 @@
+put:
+  tags:
+  - ユーザ認証システム
+  summary: '#3事業所情報更新'
+  description: |-
+    事業者識別子（内部）に紐づいた事業所を登録または内容を更新します。
+
+    使用するモデル：PlantInputModel
+
+    - operatorId：
+      - 変更（更新）することはできません。
+      - 更新時に指定するoperatorIdは、認証によって得られたoperatorIdと同じ値を設定します。（異なる場合は403エラーとなります）
+    
+    - plantId：
+      - 変更（更新）することはできません。
+      - 未設定で指定した場合は新規作成の処理となります。
+      - Response BodyのPlantModelに発番されたplantIdが埋め込まれます。
+    
+    - globalPlantId：
+      - 同じ事業者内では重複して登録はできません。
+      - 登録しない場合はplantAttributeを指定しない場合の問い合わせを実施します。この場合は重複チェックの対象になりません。
+      - 空文字等で登録した場合はglobalPlantIdに値が登録されるため重複チェックの対象になります。
+    
+    - openPlantId：
+      - 末尾6桁が数字であり、同じ事業者内では重複して登録はできません。
+  parameters:
+  - in: header
+    name: apiKey
+    description: システムに払い出されているAPIKey
+    required: true
+    schema:
+      type: string
+      example: "12345-abcde-67890-fghij"
+  - in: header
+    name: Authorization
+    description: アクセストークン
+    required: true
+    schema:
+      type: string
+      example: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzZDA3YmJjM2Q3NWM2OTQyNzUxMGY2MTc0ZWIyZjE2NTQ3ZDRhN2QiLCJ0eXAiOiJKV1QifQ.eyJvcGVyYXRvcl9pZCI6IjBmMWViYTkwLTgzOWYtNDA1OS1iOWNiLTcwY2JhZjQ5MDIzOSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9kYXRhLXNwYWNlcy1kZXYtajh3bHB1N2oiLCJhdWQiOiJkYXRhLXNwYWNlcy1kZXYtajh3bHB1N2oiLCJhdXRoX3RpbWUiOjE2OTc3NjU3OTEsInVzZXJfaWQiOiI4NmMzNDE2Yy00MDA0LTRjNGUtYTNlNy00MGJiNjY5YTZmNWIiLCJzdWIiOiI4NmMzNDE2Yy00MDA0LTRjNGUtYTNlNy00MGJiNjY5YTZmNWIiLCJpYXQiOjE2OTc3NjU3OTEsImV4cCI6MTY5Nzc2OTM5MSwiZW1haWwiOiJ0ZXN0ZG90ZF90ZXN0QHNhbXBsZS5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdGRvdGRfdGVzdEBzYW1wbGUuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.mAe7NTKTiKY-pGYZxvjBejIMpgfgBTz4ymGM2jMDpwBT2aRQCAcV0a2__n3ewgBl1kwR66OcsDq6CbXHu33zRiBGbYehy0aotTb0C81DIGnD__n0w8eYuoXhvp3z2ScOfOPBhCvoA9Eg1Yvk3rgpfQa8eFGCOp1-_RQuiaXo8IqRbg9xgCbo6xaxSvgeup-OHv0tR7IwDmauwCT-RCeU0WxHn6i2YKgUrULFIZSoF8WQuPL0HKEl4-jJbOP2TASTpLyshCDeECq4AaWercYf36A2DZ6udhJSO-lKwPtb5QjGJQbVKd_SINdoMvI2oHvuhzPz5MK4StMCumZ02AZ9sw"
+  requestBody:
+      description: Request Body
+      content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/dataModel/plantModel.yaml#/plantModel'
+            required: true
+            examples:
+                update1:
+                  summary: 更新する場合でplantAttributeを指定しない場合
+                  value:
+                    dataModelType: "test1"
+                    attribute:
+                      openPlantId: "9876543210987123456"
+                      operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                      plantAddress: xx県xx市xxxx町1-1-1234
+                      plantId: d9a38406-cae2-4679-b052-15a75f5531e7
+                      plantName: A工場
+                      plantAttribute: {}
+                update2:
+                  summary: 更新する場合でplantAttributeを指定する場合
+                  value:
+                    dataModelType: "test1"
+                    attribute:
+                      openPlantId: "9876543210987123456"
+                      operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                      plantAddress: xx県xx市xxxx町1-1-1234
+                      plantId: d9a38406-cae2-4679-b052-15a75f5531e7
+                      plantName: A工場
+                      plantAttribute: 
+                        globalPlantId: "sample1"
+                create:
+                  summary: 新規作成する場合
+                  value:
+                    dataModelType: "test1"
+                    attribute:
+                      openPlantId: "9876543210987123456"
+                      operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                      plantAddress: xx県xx市xxxx町1-1-1234
+                      plantName: A工場
+                      plantAttribute: {}
+          required: true
+  responses:
+    "201":
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/dataModel/plantModel.yaml#/plantModel'
+    "400":
+      description: リクエスト自体に問題がある場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http400Error.yaml#/HTTP400Error'
+          examples:
+            invalidNullOrEmptyError:
+              summary: 値が必須の項目で値を指定しなかった場合（0桁やNullableの項目は除く）
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, plantName: cannot be blank."
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+            invalidMaxLengthError:
+              summary: 値が許容桁数以上または以下の場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, plantName: the length must be between 1 and 256."
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+            invalidTypeError:
+              summary: 型異常の場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, plantName: Unmarshal type error: expected=string, got=number."
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+            invalidRequestBodyError:
+              summary: RequestBodyの形式が不正の場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, invalid character ',' looking for beginning of value"
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+            invalidEndValueError:
+              summary: openPlantIdの末尾6桁が数値でない場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, openPlantId: the last 6 digits must always be numeric "
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+            invalidKeyDuplicationError:
+              summary: 重複不可の値が重複している場合
+              value:
+                code: "[auth] BadRequest"
+                message: "openPlantId: 9876543210987123456 is already exists."
+                detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+    "401":
+          description: 提供された認証情報が無効または問題がある場合の異常ステータスコード
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/common/http401Error.yaml#/HTTP401Error'
+              examples:
+                authenticatedError:
+                  summary: アクセストークンがリクエストに含まれない場合
+                  value:
+                    code: "[auth] Unauthorized"
+                    message: Authentication required
+                    detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: PUT"
+                authenticatedUnexpectedError:
+                  summary: アクセストークンが期限切れまたは不正の場合
+                  value:
+                    code: "[auth] Unauthorized"
+                    message: Invalid or expired token
+                    detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: PUT"
+    "403":
+      description: クライアントがリソースへのアクセスを拒否された場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http403Error.yaml#/HTTP403Error'
+          examples:
+            invalidError:
+              summary: APIKeyがリクエストに含まれない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: You do not have the necessary privileges
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: PUT"
+            invalidKeyError:
+              summary: APIKeyが一致しない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: Invalid key
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: PUT"
+    "404":
+      description: 要求されたリソースが存在しない場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http404Error.yaml#/HTTP404Error'
+          examples:
+            authenticatedError:
+              summary: 指定されたエンドポイントが存在しない場合
+              value:
+                code: "[auth] NotFound"
+                message: Endpoint Not Found
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: PUT"
+    "500":
+      description: システムの内部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http500Error.yaml#/HTTP500Error'
+          example:
+            code: "[auth] InternalServerError"
+            message: Unexpected error occurred
+            detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+    "503":
+      description: システムの外部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http503Error.yaml#/HTTP503Error'
+          example:
+            code: "[auth] ServiceUnavailable"
+            message: Unexpected error occurred in outer service
+            detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: PUT"
+  security:
+  - ApiKeyAuth: []
+  - Authorization: []
+  x-codegen-request-body-name: RequestBody
+get:
+  tags:
+  - ユーザ認証システム
+  summary: '#4事業所一覧取得'
+  description: |-
+    事業者識別子（内部）に紐づけられている事業所識別子（内部）の一覧を取得します。
+
+    取得されるモデル：PlantModel
+  parameters:
+    - in: header
+      name: apiKey
+      description: システムに払い出されているAPIKey
+      required: true
+      schema:
+        type: string
+        example: "12345-abcde-67890-fghij"
+    - in: header
+      name: Authorization
+      description: アクセストークン
+      required: true
+      schema:
+        type: string
+        example: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzZDA3YmJjM2Q3NWM2OTQyNzUxMGY2MTc0ZWIyZjE2NTQ3ZDRhN2QiLCJ0eXAiOiJKV1QifQ.eyJvcGVyYXRvcl9pZCI6IjBmMWViYTkwLTgzOWYtNDA1OS1iOWNiLTcwY2JhZjQ5MDIzOSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9kYXRhLXNwYWNlcy1kZXYtajh3bHB1N2oiLCJhdWQiOiJkYXRhLXNwYWNlcy1kZXYtajh3bHB1N2oiLCJhdXRoX3RpbWUiOjE2OTc3NjU3OTEsInVzZXJfaWQiOiI4NmMzNDE2Yy00MDA0LTRjNGUtYTNlNy00MGJiNjY5YTZmNWIiLCJzdWIiOiI4NmMzNDE2Yy00MDA0LTRjNGUtYTNlNy00MGJiNjY5YTZmNWIiLCJpYXQiOjE2OTc3NjU3OTEsImV4cCI6MTY5Nzc2OTM5MSwiZW1haWwiOiJ0ZXN0ZG90ZF90ZXN0QHNhbXBsZS5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdGRvdGRfdGVzdEBzYW1wbGUuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.mAe7NTKTiKY-pGYZxvjBejIMpgfgBTz4ymGM2jMDpwBT2aRQCAcV0a2__n3ewgBl1kwR66OcsDq6CbXHu33zRiBGbYehy0aotTb0C81DIGnD__n0w8eYuoXhvp3z2ScOfOPBhCvoA9Eg1Yvk3rgpfQa8eFGCOp1-_RQuiaXo8IqRbg9xgCbo6xaxSvgeup-OHv0tR7IwDmauwCT-RCeU0WxHn6i2YKgUrULFIZSoF8WQuPL0HKEl4-jJbOP2TASTpLyshCDeECq4AaWercYf36A2DZ6udhJSO-lKwPtb5QjGJQbVKd_SINdoMvI2oHvuhzPz5MK4StMCumZ02AZ9sw"
+  responses:
+    "200":
+      description: PlantModelの配列を取得
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../components/schemas/dataModel/plantModel.yaml#/plantModel'
+          examples:
+            noItem:
+              summary: 結果が0件の場合
+              value: []
+            overOneItem:
+              summary: 結果が1件以上の場合かつplantAttributeのフィールドに値がない場合
+              value:
+                - dataModelType: "test1"
+                  attribute:
+                    openPlantId: "9876543210987123456"
+                    operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                    plantAddress: xx県xx市xxxx町1-1-1234
+                    plantId: d9a38406-cae2-4679-b052-15a75f5531e9
+                    plantName: A工場
+                    plantAttribute: {}
+            overOneIncludeEmptyDataInPlantAttribute:
+              summary: 結果が1件以上の場合かつplantAttributeのフィールドに空文字が設定されている場合
+              value:
+                - dataModelType: "test1"
+                  attribute:
+                    openPlantId: "9876543210987123456"
+                    operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                    plantAddress: xx県xx市xxxx町1-1-1234
+                    plantId: d9a38406-cae2-4679-b052-15a75f5531e9
+                    plantName: A工場
+                    plantAttribute:
+                      globalPlantId: ""
+            overOneIncludeOneValueDataInPlantAttribute:
+              summary: 結果が1件以上の場合かつplantAttributeのフィールドに値がある場合
+              value:
+                - dataModelType: "test1"
+                  attribute:
+                    openPlantId: "9876543210987123456"
+                    operatorId: d9a38406-cae2-4679-b052-15a75f5531e8
+                    plantAddress: xx県xx市xxxx町1-1-1234
+                    plantId: d9a38406-cae2-4679-b052-15a75f5531e9
+                    plantName: A工場
+                    plantAttribute:
+                      globalPlantId: "sampleId1"
+    "401":
+      description: 提供された認証情報が無効または問題がある場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http401Error.yaml#/HTTP401Error'
+          examples:
+            authenticatedError:
+              summary: アクセストークンがリクエストに含まれない場合
+              value:
+                code: "[auth] Unauthorized"
+                message: Authentication required
+                detail:  "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: GET"
+            authenticatedUnexpectedError:
+              summary: アクセストークンが期限切れまたは不正の場合
+              value:
+                code: "[auth] Unauthorized"
+                message: Invalid or expired token
+                detail:  "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: GET"
+    "403":
+      description: クライアントがリソースへのアクセスを拒否された場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http403Error.yaml#/HTTP403Error'
+          examples:
+            invalidError:
+              summary: APIKeyがリクエストに含まれない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: You do not have the necessary privileges
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: GET"
+            invalidKeyError:
+              summary: APIKeyが一致しない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: Invalid key
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: GET"
+    "404":
+      description: 要求されたリソースが存在しない場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http404Error.yaml#/HTTP404Error'
+          examples:
+            authenticatedError:
+              summary: 指定されたエンドポイントが存在しない場合
+              value:
+                code: "[auth] NotFound"
+                message: Endpoint Not Found
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: GET"
+    "500":
+      description: システムの内部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http500Error.yaml#/HTTP500Error'
+          example:
+            code: "[auth] InternalServerError"
+            message: Unexpected error occurred
+            detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: GET"
+    "503":
+      description: システムの外部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http503Error.yaml#/HTTP503Error'
+          example:
+            code: "[auth] ServiceUnavailable"
+            message: Unexpected error occurred in outer service
+            detail: "id: c1367766-27b1-c27f-b2d9-d0f7bd8a5225, timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: plant, method: GET"
+  security:
+  - ApiKeyAuth: []
+  - Authorization: []

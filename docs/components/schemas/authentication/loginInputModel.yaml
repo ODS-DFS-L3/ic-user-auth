@@ -1,0 +1,20 @@
+loginInputModel:
+  type: object
+  description: ユーザ当人認証APIパスワード方式のINPUT
+  required:
+  - operatorAccountId
+  - accountPassword
+  properties:
+    operatorAccountId:
+      type: string
+      description: 事業者アカウントID
+      example: exampleAccountId001
+      maxLength: 255
+      minLength: 3
+    accountPassword:
+      type: string
+      description: 事業者アカウントパスワード
+      example: xx@&&1234Pass
+      maxLength: 20
+      minLength: 8
+      pattern: '^[a-zA-Z0-9!@#$%^&*()]+$'

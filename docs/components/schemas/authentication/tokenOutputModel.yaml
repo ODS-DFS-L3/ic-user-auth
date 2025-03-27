@@ -1,0 +1,21 @@
+tokenOutputModel:
+  type: object
+  description: トークン検証APIのOUTPUT
+  properties:
+    operatorId: 
+      type: string
+      description: 事業者識別子（内部）
+      example: db00afa9-8e8c-8887-5a98-d2c768bf6205
+      maxLength: 36
+      minLength: 36
+      format: uuid
+    openSystemId:
+      type: string
+      description: 公開システム識別子
+      example: cooperationSystemC202
+      maxLength: 36
+      minLength: 21
+    active:
+      type: boolean
+      description: トークン有効
+      example: true

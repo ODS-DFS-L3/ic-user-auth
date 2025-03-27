@@ -1,0 +1,60 @@
+operatorModel:
+  required:
+  - dataModelType
+  - name
+  - attribute
+  type: object
+  description: 事業者情報APIのINPUTモデル
+  properties:
+    dataModelType:
+      type: string
+      description: データモデルタイプ
+      enum:
+        - test1
+        - test2
+      example: test1
+    attribute:
+      type: object
+      description: 事業者情報
+      required:
+        - openOperatorId
+        - operatorAddress
+        - operatorAttribute
+        - operatorId
+        - operatorName
+      properties:
+        openOperatorId:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: 事業者識別子（ローカル）
+          example: "1234567890123"
+        operatorAddress:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 事業者所在地
+          example: xx県xx市xxxx町1-1
+        operatorAttribute:
+          type: object
+          description: 事業者の属性情報
+          properties:
+            globalOperatorId:
+              type: string
+              description: 事業者識別子（グローバル）
+              maxLength: 256
+              minLength: 0
+              example: 1234ABCD5678EFGH0000
+        operatorId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 事業者識別子（内部）
+          format: uuid
+          example: d9a38406-cae2-4679-b052-15a75f5531e6
+        operatorName:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 事業者名
+          example: A株式会社

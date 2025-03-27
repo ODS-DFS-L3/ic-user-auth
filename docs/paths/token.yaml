@@ -1,0 +1,149 @@
+post:
+  tags:
+  - ユーザ認証システム
+  summary: トークンイントロスペクション
+  description: |-
+    トークンの有効性の検証を行います
+
+    使用するモデル：tokenInputModel
+
+    取得されるモデル：tokenOutputModel
+
+    - operatorId
+      - リソースオーナーフロー利用（ユーザ認証）の場合、返却されます。
+      - クライアントクレデンシャルフロー利用（クライアントシステム認証）の場合、返却されません。
+
+    - openSystemId
+      - リソースオーナーフロー利用（ユーザ認証）の場合、返却されません。
+      - クライアントクレデンシャルフロー利用（クライアントシステム認証）の場合、返却されます。
+
+  parameters:
+    - in: header
+      name: apiKey
+      description: システムに払い出されているAPIKey
+      required: true
+      schema:
+        type: string
+        example: "12345-abcde-67890-fghij"
+  requestBody:
+    description: Request Body
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas/authentication/tokenInputModel.yaml#/tokenInputModel'
+    required: true
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/authentication/tokenOutputModel.yaml#/tokenOutputModel'
+          examples:
+            authUserSuccessful:
+              summary: 認証成功時（ユーザ認証）
+              value:
+                operatorId: "db00afa9-8e8c-8887-5a98-d2c768bf6205"
+                active: true
+            authClientSuccessful:
+              summary: 認証成功時（クライアントシステム認証）
+              value:
+                openSystemId: "cooperationSystemC202"
+                active: true                
+            authFailure:
+              summary: 認証失敗時（有効期限切れ含む）
+              value:
+                active: false
+    "400":
+      description: リクエスト自体に問題がある場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http400Error.yaml#/HTTP400Error'
+          examples:
+            invalidNullOrEmptyError:
+              summary: 値が必須の項目で値を指定しなかった場合（0桁やNullableの項目は除く）
+              value:
+                code: "[auth] BadRequest"
+                message: "Validation failed, idToken: cannot be blank."
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+            invalidTypeError:
+              summary: 型異常の場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Invalid request parameters, idToken: Unmarshal type error: expected=string, got=number."
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+            invalidRequestBodyError:
+              summary: RequestBodyの形式が不正の場合
+              value:
+                code: "[auth] BadRequest"
+                message: "Invalid request parameters, invalid character 'i' looking for beginning of object key string"
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+    "401":
+      description: 提供された認証情報が無効または問題がある場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http401Error.yaml#/HTTP401Error'
+          examples:
+            authenticatedClientError:
+              summary: 認証情報が無効の場合
+              value:
+                code: "[auth] Unauthorized"
+                message: Invalid credentials
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+    "403":
+      description: クライアントがリソースへのアクセスを拒否された場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http403Error.yaml#/HTTP403Error'
+          examples:
+            invalidError:
+              summary: APIKeyがリクエストに含まれない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: You do not have the necessary privileges
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+            invalidKeyError:
+              summary: APIKeyが一致しない場合
+              value:
+                code: "[auth] AccessDenied"
+                message: Invalid key
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+    "404":
+      description: 要求されたリソースが存在しない場合の異常ステータスコード
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http404Error.yaml#/HTTP404Error'
+          examples:
+            authenticatedError:
+              summary: 指定されたエンドポイントが存在しない場合
+              value:
+                code: "[auth] NotFound"
+                message: Endpoint Not Found
+                detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+    "500":
+      description: システムの内部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http500Error.yaml#/HTTP500Error'
+          example:
+            code: "[auth] InternalServerError"
+            message: Unexpected error occurred
+            detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+    "503":
+      description: システムの外部にてエラーが発生している場合
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/common/http503Error.yaml#/HTTP503Error'
+          example:
+            code: "[auth] ServiceUnavailable"
+            message: Unexpected error occurred in outer service
+            detail: "id: , timeStamp: 2024-10-02T02:26:57.512Z, dataTarget: , method: POST"
+  security:
+  - ApiKeyAuth: []
+  x-codegen-request-body-name: RequestBody

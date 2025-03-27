@@ -1,0 +1,6 @@
+AdminUser,Admin@Pass0,Admin@email.com,AdminClientID,AdminSecret
+LoginUser,Login@Pass1,Login@email.com,LoginClientID,LoginSecret
+ChangeUser,Change@Pass2,Change@email.com,ChangeClientID,ChangeSecret
+TokenUser,Token@Pass3,Token@email.com,TokenClientID,TokenSecret
+RefreshUser,Refresh@Pass4,Refresh@email.com,RefreshClientID,RefreshSecret
+oem_a@example.com,oemA&user_01,,BIncorporatedClient,BIncorporatedSecret

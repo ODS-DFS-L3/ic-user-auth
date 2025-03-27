@@ -1,0 +1,1 @@
+INSERT INTO public.api_keys (api_key, application_name, application_attribute, deleted_at, created_at, created_user_id, updated_at, updated_user_id) VALUES('Sample-APIKey1','Application-Vendor-A', 'DataSpace', NULL, '2024-03-26 12:00:00.000', 'seed', '2024-03-26 12:00:00.000', 'seed');

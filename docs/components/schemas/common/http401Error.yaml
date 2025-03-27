@@ -1,0 +1,16 @@
+HTTP401Error:
+  type: object
+  description: HTTP401エラー
+  properties:
+    code:
+      type: string
+      description: エラーステータス
+      example: "[auth] Unauthorized"
+    detail:
+      type: string
+      description: 基盤運営事業者向け調査情報
+      example: "id:d9a38406-cae2-4679-b052-15a75f5531e6, timeStamp:2024-10-02T02:26:57.512Z, dataTarget:operator, method:GET"
+    message:
+      type: string
+      description: エラーメッセージ
+      example: Invalid credentials

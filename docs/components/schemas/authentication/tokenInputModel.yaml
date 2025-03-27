@@ -1,0 +1,10 @@
+tokenInputModel:
+  type: object
+  description: トークン検証APIのINPUT
+  required:
+  - idToken
+  properties:
+    idToken :
+      type: string
+      description: IDトークン
+      example: eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzZDA3YmJjM2Q3NWM2OTQyNzUxMGY2MTc0ZWIyZjE2NTQ3ZDRhN2QiLCJ0eXAiOiJKV1QifQ
